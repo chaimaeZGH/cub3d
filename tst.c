@@ -6,7 +6,7 @@
 /*   By: czghoumi <czghoumi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 23:09:01 by czghoumi          #+#    #+#             */
-/*   Updated: 2025/11/12 04:11:48 by czghoumi         ###   ########.fr       */
+/*   Updated: 2025/11/15 06:52:51 by czghoumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ int   chack_empty_line(char *line)
 }
 void    free_mymap(t_pars *my_map)
 {
+    int i = 0;
+    if(my_map == NULL)
+        return;
     if(my_map->no != NULL)
         free(my_map->no);
     if(my_map->so != NULL)
@@ -74,6 +77,12 @@ void    free_mymap(t_pars *my_map)
         free(my_map->ceil);
     if(my_map->floor != NULL)
         free(my_map->floor);
+    if(my_map->map!=NULL)
+    {
+        while(my_map->map[i]!=NULL)
+            free(my_map->map[i++]);   
+        free(my_map->map);
+    }
     free(my_map);
     printf("free the struct\n");
 }
@@ -226,6 +235,33 @@ rgb_t   *colors_parce(char *word)
     return(color);
 }
 
+char *trim_line(char *line)
+{
+    int i;
+
+    if (!line)
+        return NULL;
+    i = 0;
+    while (line[i] != '\0')
+        i++;
+    i--;
+    while (i >= 0 && (line[i] == ' ' || line[i] == '\t' || line[i] == '\n'))
+        i--;
+    if (i < 0)
+        return NULL;
+    char *new_line=malloc(i+2);
+    if (!new_line)
+        return NULL;
+    int j = 0;
+    while(j<=i)
+    {   
+        new_line[j]=line[j];
+        j++;
+    }
+    new_line[j]='\0';
+    // free(line);
+    return (new_line);
+}
 int    fill_mapst(char *line,t_pars *my_map)
 {
     char    *word;
@@ -237,7 +273,6 @@ int    fill_mapst(char *line,t_pars *my_map)
     {
         free(word);
         int s = ft_count(line);
-        printf("%d words\n",s);
         if(s != 2)
         {
             free_mymap(my_map);
@@ -257,7 +292,6 @@ int    fill_mapst(char *line,t_pars *my_map)
     {
         free(word);
         int s = ft_count(line);
-        printf("%d words\n",s);
         if(s != 2)
         {
             free_mymap(my_map);
@@ -277,7 +311,6 @@ int    fill_mapst(char *line,t_pars *my_map)
     {
         free(word);
         int s = ft_count(line);
-        printf("%d words\n",s);
         if(s != 2)
         {
             free_mymap(my_map);
@@ -297,7 +330,6 @@ int    fill_mapst(char *line,t_pars *my_map)
     {
         free(word);
         int s = ft_count(line);
-        printf("%d words\n",s);
         if(s != 2)
         {
             free_mymap(my_map);
@@ -317,7 +349,6 @@ int    fill_mapst(char *line,t_pars *my_map)
     {
         free(word);
         int s = ft_count(line);
-        printf("%d words\n",s);
         if(s != 2)
         {
             free_mymap(my_map);
@@ -345,7 +376,6 @@ int    fill_mapst(char *line,t_pars *my_map)
     {
         free(word);
         int s = ft_count(line);
-        printf("%d words\n",s);
         if(s != 2)
         {
             free_mymap(my_map);
@@ -368,7 +398,43 @@ int    fill_mapst(char *line,t_pars *my_map)
             return (0);
         }
     }
-    else 
+    else if (my_map->no != NULL && my_map->so != NULL && my_map->ea!=NULL && my_map->we!=NULL && my_map->floor!=NULL && my_map->ceil!=NULL && word[0] == '1' && my_map->stop == false)
+    {
+        free(word);
+        if (my_map->map == NULL)
+        {
+            my_map->map = malloc(sizeof(char *) * 2);
+            if(!my_map->map)
+                return 0;
+            my_map->map[0] = trim_line(line);
+            my_map->map[1] = NULL;
+        }
+        else 
+        {
+            int s = 0;
+            while(my_map->map[s] != NULL)
+                s++;
+            char **new_map = malloc((s + 2) * sizeof(char *));
+            if (!new_map)
+                return 0;
+            int i = 0;
+            while (i < s) 
+            {
+                new_map[i] = my_map->map[i];
+                i++;
+            }
+            new_map[s] = trim_line(line);
+            if (!new_map[s]) 
+            {
+                free(new_map);
+                return 0;
+            }
+            new_map[s + 1] = NULL;
+            free(my_map->map);
+            my_map->map = new_map;
+        }
+    }
+    else
     {
         printf("%s ok haa\n",word);
         free(word);
@@ -378,11 +444,54 @@ int    fill_mapst(char *line,t_pars *my_map)
     return (1);
 }
 
-
-
 void ll()
 {
     system ("leaks cub3D");
+}
+bool    check_content(char *line)
+{
+    int i = 0;
+    while(line[i]!='\0')
+    {
+        if(!(line[i]== ' ' ||line[i]== '\t'|| line[i]== '\n'  || line[i] == '0' || line[i] == '1' || line[i] == 'N'|| line[i] == 'S' || line[i] == 'E' ||line[i] == 'W'))
+            return false; 
+        i++;
+    }
+    if(line[i-1] != '1')
+        return false;
+    return true;
+}
+bool check_line(char *line)
+{
+     int i = 0;
+    while(line[i]!='\0')
+    {
+        if(!(line[i]== ' ' ||line[i]== '\t' ||line[i]== '1'||line[i]== '\n'))
+            return false;
+        i++;
+    }
+    return true;
+}
+
+int check_map(char **map)
+{
+    // ther is 1 0 (N/S/E/W) SPACE
+    if(!map)
+        return 0;
+    int i = 0;
+    
+    while(map[i] != NULL)
+    {
+        if(check_content(map[i]) == false)
+            return 0;
+        i++;
+    }
+    if(check_line(map[0])==false || check_line(map[i-1])==false)
+        return 0;
+    return 1;
+    // first line and last fill with only ones or space
+    // eache line have 1 in its last char
+    // the 0 must not be rounded by space
 }
 
 int main(int argc, char **argv)
@@ -412,6 +521,8 @@ int main(int argc, char **argv)
         while(line != NULL && chack_empty_line(line) == 1)
         {
             free(line);
+            if(my_map!=NULL && my_map->map!=NULL)
+                my_map->stop = true;
             line = get_next_line(s);
         }
         if(fill_mapst(line,my_map) == 0)
@@ -423,11 +534,17 @@ int main(int argc, char **argv)
         }
         free(line);
         line = get_next_line(s);
-        // if u allucat evry thing and founding somthing other then empty line mape invalid
-        // if the map "110011" apears and thers still one component is null map invalid
+    }
+    free(line);
+    
+    if(check_map(my_map->map) == 0)
+    {
+        printf("map form is not corect\n");
+        free_mymap(my_map);
+        my_map = NULL; 
     }
     printf("done\n");
-    free(line);
-    free_mymap(my_map);
+    if(my_map!=NULL)
+        free_mymap(my_map);
     atexit(ll);
 }
