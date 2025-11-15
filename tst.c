@@ -6,7 +6,7 @@
 /*   By: czghoumi <czghoumi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 23:09:01 by czghoumi          #+#    #+#             */
-/*   Updated: 2025/11/15 06:52:51 by czghoumi         ###   ########.fr       */
+/*   Updated: 2025/11/15 08:20:01 by czghoumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void    free_mymap(t_pars *my_map)
         free(my_map->map);
     }
     free(my_map);
-    printf("free the struct\n");
 }
 
 char *firs_word(char *line)
@@ -259,7 +258,6 @@ char *trim_line(char *line)
         j++;
     }
     new_line[j]='\0';
-    // free(line);
     return (new_line);
 }
 int    fill_mapst(char *line,t_pars *my_map)
@@ -448,9 +446,11 @@ void ll()
 {
     system ("leaks cub3D");
 }
+
 bool    check_content(char *line)
 {
     int i = 0;
+    
     while(line[i]!='\0')
     {
         if(!(line[i]== ' ' ||line[i]== '\t'|| line[i]== '\n'  || line[i] == '0' || line[i] == '1' || line[i] == 'N'|| line[i] == 'S' || line[i] == 'E' ||line[i] == 'W'))
@@ -461,6 +461,7 @@ bool    check_content(char *line)
         return false;
     return true;
 }
+
 bool check_line(char *line)
 {
      int i = 0;
@@ -468,6 +469,35 @@ bool check_line(char *line)
     {
         if(!(line[i]== ' ' ||line[i]== '\t' ||line[i]== '1'||line[i]== '\n'))
             return false;
+        i++;
+    }
+    return true;
+}
+
+bool check_zero_pos(char **map)
+{
+    int i = 1;
+    int j;
+    if (!map || !map[0]) 
+        return false;
+    while(map[i+1] != NULL)
+    {
+        j = 1;
+        while(map[i][j+1] != '\0')
+        {
+            if(map[i][j] == '0')
+            {
+                if(j >= (int)ft_strlen(map[i-1]) || map[i-1][j] == ' ')
+                    return false;
+                if(j >= (int)ft_strlen(map[i+1]) || map[i+1][j] == ' ')
+                    return false;
+                if(map[i][j-1] == ' ')
+                    return false;
+                if(map[i][j+1] == ' ')
+                    return false;
+            }
+            j++;
+        }
         i++;
     }
     return true;
@@ -486,12 +516,11 @@ int check_map(char **map)
             return 0;
         i++;
     }
-    if(check_line(map[0])==false || check_line(map[i-1])==false)
+    if(check_line(map[0]) == false || check_line(map[i-1]) == false)
+        return 0;
+    if(check_zero_pos(map) == false)
         return 0;
     return 1;
-    // first line and last fill with only ones or space
-    // eache line have 1 in its last char
-    // the 0 must not be rounded by space
 }
 
 int main(int argc, char **argv)
@@ -529,7 +558,7 @@ int main(int argc, char **argv)
         {
             free(line);
             printf("erreur in map\n");
-            atexit(ll);
+            // atexit(ll);
             return (1);
         }
         free(line);
@@ -546,5 +575,5 @@ int main(int argc, char **argv)
     printf("done\n");
     if(my_map!=NULL)
         free_mymap(my_map);
-    atexit(ll);
+    // atexit(ll);
 }
