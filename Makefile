@@ -1,7 +1,7 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address	
 
-SRCS = tst.c get_next_line.c
+SRCS = tst.c get_next_line.c fill_map.c
 OBJS = $(SRCS:.c=.o)
 
 # BONUS_SRCS = bonus.c
