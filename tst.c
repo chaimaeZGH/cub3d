@@ -6,7 +6,7 @@
 /*   By: czghoumi <czghoumi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 23:09:01 by czghoumi          #+#    #+#             */
-/*   Updated: 2025/11/22 12:01:06 by czghoumi         ###   ########.fr       */
+/*   Updated: 2025/11/22 14:17:29 by czghoumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,8 @@ t_rgb	*colors_parce(char *word)
 		return (NULL);
 	}
 	color = malloc(sizeof(t_rgb));
+	if (!color)
+		return (color);
 	i = 0;
 	while (rgb[i] != NULL)
 	{
@@ -420,7 +422,12 @@ void	fill_map(t_pars *my_map)
 		j = 0;
 		if ((int)ft_strlen(my_map->map[i]) < k)
 		{
-			line = malloc(k);
+			line = malloc(k+1);
+			if (!line)
+			{
+				free_mymap(my_map);
+				return ;
+			}
 			while (my_map->map[i][j] != '\0')
 			{
 				line[j] = my_map->map[i][j];
@@ -455,12 +462,16 @@ int	main(int argc, char **argv)
 	if (s < 0)
 		return (printf("erreur in oprning file\n"), 1);
 	my_map = malloc(sizeof(t_pars));
+	if(!my_map)
+		return 0;
 	my_map->ea = NULL;
 	my_map->no = NULL;
 	my_map->so = NULL;
 	my_map->we = NULL;
 	my_map->map = NULL;
 	my_map->stop = false;
+	my_map->ceil = NULL;
+    my_map->floor = NULL;
 	line = get_next_line(s);
 	while (line != NULL)
 	{
@@ -489,6 +500,8 @@ int	main(int argc, char **argv)
 		my_map = NULL; 
 	}
 	fill_map(my_map);
+	if(my_map == NULL)
+		return (printf("faild to malloc new map"), 1);
 	printf("done\n");
 	if (my_map != NULL)
 		free_mymap(my_map);
