@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tst.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: czghoumi <czghoumi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 23:09:01 by czghoumi          #+#    #+#             */
-/*   Updated: 2025/11/22 14:17:29 by czghoumi         ###   ########.fr       */
+/*   Updated: 2025/12/02 21:40:37 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "cube.h"
 
 bool	chck_cub(char *arg)
 {
@@ -446,64 +446,64 @@ void	fill_map(t_pars *my_map)
 	}
 }
 
-int	main(int argc, char **argv)
-{
-	int		s;
-	t_pars	*my_map;
-	char	*line;
+// int	main(int argc, char **argv)
+// {
+// 	int		s;
+// 	t_pars	*my_map;
+// 	char	*line;
 
-	if (argc < 2 || argc > 4)
-		return (printf("erreur in args\n"), 1);
-	if (ft_count(argv[1]) > 1)
-		return (printf("erreur in file name\n"), 1);
-	if (!chck_cub(argv[1]))
-		return (printf("erreur in file name only '*.cub'\n"), 1);
-	s = open(argv[1], O_RDONLY);
-	if (s < 0)
-		return (printf("erreur in oprning file\n"), 1);
-	my_map = malloc(sizeof(t_pars));
-	if(!my_map)
-		return 0;
-	my_map->ea = NULL;
-	my_map->no = NULL;
-	my_map->so = NULL;
-	my_map->we = NULL;
-	my_map->map = NULL;
-	my_map->stop = false;
-	my_map->ceil = NULL;
-    my_map->floor = NULL;
-	line = get_next_line(s);
-	while (line != NULL)
-	{
-		while (line != NULL && chack_empty_line(line) == 1)
-		{
-			free(line);
-			if (my_map != NULL && my_map->map != NULL)
-				my_map->stop = true;
-			line = get_next_line(s);
-		}
-		if (fill_mapst(line, my_map) == 0)
-		{
-			free(line);
-			printf("erreur in map\n");
-			atexit(ll);
-			return (1);
-		}
-		free(line);
-		line = get_next_line(s);
-	}
-	free(line);
-	if (check_map(my_map->map) == 0)
-	{
-		printf("map form is not corect\n");
-		free_mymap(my_map);
-		my_map = NULL; 
-	}
-	fill_map(my_map);
-	if(my_map == NULL)
-		return (printf("faild to malloc new map"), 1);
-	printf("done\n");
-	if (my_map != NULL)
-		free_mymap(my_map);
-	atexit(ll);
-}
+// 	if (argc < 2 || argc > 4)
+// 		return (printf("erreur in args\n"), 1);
+// 	if (ft_count(argv[1]) > 1)
+// 		return (printf("erreur in file name\n"), 1);
+// 	if (!chck_cub(argv[1]))
+// 		return (printf("erreur in file name only '*.cub'\n"), 1);
+// 	s = open(argv[1], O_RDONLY);
+// 	if (s < 0)
+// 		return (printf("erreur in oprning file\n"), 1);
+// 	my_map = malloc(sizeof(t_pars));
+// 	if(!my_map)
+// 		return 0;
+// 	my_map->ea = NULL;
+// 	my_map->no = NULL;
+// 	my_map->so = NULL;
+// 	my_map->we = NULL;
+// 	my_map->map = NULL;
+// 	my_map->stop = false;
+// 	my_map->ceil = NULL;
+//     my_map->floor = NULL;
+// 	line = get_next_line(s);
+// 	while (line != NULL)
+// 	{
+// 		while (line != NULL && chack_empty_line(line) == 1)
+// 		{
+// 			free(line);
+// 			if (my_map != NULL && my_map->map != NULL)
+// 				my_map->stop = true;
+// 			line = get_next_line(s);
+// 		}
+// 		if (fill_mapst(line, my_map) == 0)
+// 		{
+// 			free(line);
+// 			printf("erreur in map\n");
+// 			atexit(ll);
+// 			return (1);
+// 		}
+// 		free(line);
+// 		line = get_next_line(s);
+// 	}
+// 	free(line);
+// 	if (check_map(my_map->map) == 0)
+// 	{
+// 		printf("map form is not corect\n");
+// 		free_mymap(my_map);
+// 		my_map = NULL; 
+// 	}
+// 	fill_map(my_map);
+// 	if(my_map == NULL)
+// 		return (printf("faild to malloc new map"), 1);
+// 	printf("done\n");
+// 	if (my_map != NULL)
+// 		free_mymap(my_map);
+// 	atexit(ll);
+// }

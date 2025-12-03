@@ -1,41 +1,31 @@
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address	
+CC      = cc
+CFLAGS  = -Wall -Wextra -Werror #-fsanitize=address
 
-SRCS = tst.c get_next_line.c fill_map.c
-OBJS = $(SRCS:.c=.o)
+NAME    = Cube3d
 
-# BONUS_SRCS = bonus.c
-# BONUS_OBJS = $(BONUS_SRCS:.c=.o)
-
-NAME = cub3D
-HEADER = cub3D.h
+SRC_DIR = ray_casting
+SRC     = casing.c tst.c get_next_line.c fill_map.c wall_textur.c
+OBJ     = $(SRC:.c=.o)
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-# NAME_BONUS = bonus
-# HEADER_BONUS = bonus.h
+MLX     = MLX42/build/libmlx42.a
+GLFW    = -L$(shell brew --prefix glfw)/lib -lglfw
+MLXFLAGS = -framework Cocoa -framework OpenGL -framework IOKit
 
 all: $(LIBFT) $(NAME)
-
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
-$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) $(CFLAGS) $(MLX) $(GLFW) $(MLXFLAGS) $(LIBFT) -Iinclude -o $(NAME)
 
-# bonus: $(BONUS_OBJS)
-# 	$(CC) $(CFLAGS) $(BONUS_OBJS) -o $(NAME_BONUS)
-
-# %_bonus.o: %_bonus.c $(HEADER_BONUS)
-# 	$(CC) $(CFLAGS) -c $< -o $@
-
-%.o: %.c $(HEADER)
+%.o: %.c cube.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJ)
 	$(MAKE) -C $(LIBFT_DIR) clean
-# 	# rm -f $(OBJS_B)
 
 fclean: clean
 	rm -f $(NAME)
@@ -43,4 +33,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re

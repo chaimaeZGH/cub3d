@@ -6,11 +6,11 @@
 /*   By: czghoumi <czghoumi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 22:23:07 by czghoumi          #+#    #+#             */
-/*   Updated: 2025/11/09 23:59:23 by czghoumi         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:15:46 by czghoumi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "cube.h"
 
 
 size_t	ft_strlenn(const char *str)

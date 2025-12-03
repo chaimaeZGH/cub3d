@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   fill_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: czghoumi <czghoumi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/09 23:09:01 by czghoumi          #+#    #+#             */
-/*   Updated: 2025/11/29 17:14:22 by czghoumi         ###   ########.fr       */
+/*   Created: 2024/12/06 22:23:07 by czghoumi          #+#    #+#             */
+/*   Updated: 2025/12/02 21:43:29 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "cube.h"
 
 int	for_cardinal(char *line, char *word, char **cord, t_pars *my_map)
 {
